@@ -51,6 +51,10 @@ async fn restore_session(file_path: &PathBuf) -> Result<()> {
     }
 
     let session_data = fs::read_to_string(file_path).context("Failed to read session file")?;
+    if session_data.trim().is_empty() {
+        println!("Session file at {} is empty", file_path.display());
+        return Ok(());
+    }
     let windows: Vec<Window> =
         serde_json::from_str(&session_data).context("Failed to parse session JSON")?;
 
